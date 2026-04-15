@@ -1,0 +1,60 @@
+---
+title: "Hot Keys for Brightness and Contrast Control"
+description: "Configure and use hot keys in Monitorian to instantly adjust brightness or contrast across your monitors, with support for toggling between modes."
+---
+
+Monitorian supports hot keys that let you increase or decrease monitor brightness without opening the app window. This feature is part of the add-on features available for the Microsoft Store version and must be enabled in Key Settings before use.
+
+<Note>
+  Hot keys are an add-on feature available for the Microsoft Store version of Monitorian on a subscription basis.
+</Note>
+
+## Enabling hot keys
+
+Hot keys are not active by default. You must enable them in Key Settings inside the app.
+
+<Steps>
+  <Step title="Open the menu window">
+    Click the Monitorian icon in the system tray to open the menu window.
+  </Step>
+  <Step title="Navigate to Key Settings">
+    Open **Key Settings** from the menu window.
+  </Step>
+  <Step title="Enable hot keys">
+    Turn on the hot keys you want to use for brightness control.
+  </Step>
+</Steps>
+
+## Brightness hot keys
+
+Once enabled, Monitorian registers hot keys for increasing and decreasing monitor brightness. These act on the currently selected monitor in the app.
+
+<CardGroup cols={2}>
+  <Card title="Increase brightness" icon="sun">
+    Press the configured hot key to raise brightness by the preset step value.
+  </Card>
+  <Card title="Decrease brightness" icon="moon">
+    Press the configured hot key to lower brightness by the preset step value.
+  </Card>
+</CardGroup>
+
+## Switching between brightness and contrast modes
+
+All brightness hot keys can be switched to operate on contrast instead. This is done using dedicated mode-switching hot keys.
+
+| Hot key | Action |
+|---------|--------|
+| **To contrast** | Switches all brightness hot keys to control contrast |
+| **To brightness** | Switches all contrast hot keys back to control brightness |
+
+<Tip>
+  Use the **To contrast** hot key when you need to quickly adjust contrast across monitors, then switch back with **To brightness** when done. You do not need to reconfigure individual keys.
+</Tip>
+
+## Custom hot keys via key commands
+
+In addition to the built-in hot keys configured in Key Settings, you can define fully custom hot keys using key commands — a JSON-based configuration format. Key commands support setting brightness, setting contrast, switching input sources, and incrementing or decrementing brightness.
+
+<Info>
+  Key commands loaded via `/load` define their own hot key gestures independently. See [Advanced Commands](/addons/advanced-commands) for full details on the key commands JSON format.
+</Info>

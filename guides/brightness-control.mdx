@@ -1,0 +1,76 @@
+---
+title: "Adjusting Monitor Brightness in Monitorian"
+description: "Learn every input method for changing brightness in Monitorian: sliders, mouse wheel, touchpad swipe, tray icon scrolling, and HDR SDR content brightness."
+---
+
+Monitorian gives you several ways to adjust the brightness of your monitors directly from the Windows system tray, without navigating into display settings. This page covers all supported input methods, how the main window displays brightness values, the maximum number of monitors shown at once, and the `AdjustsSdrContent` option for HDR displays.
+
+## Opening the Main Window
+
+Click the Monitorian icon in the Windows system tray to open the main window. The window appears near the tray icon and lists all controllable monitors detected via DDC/CI, up to four at a time.
+
+<Note>
+A maximum of **4 monitors** are shown in the main window at any one time. If you have more than four connected monitors, only the first four controllable ones will be listed.
+</Note>
+
+## Adjusting Brightness
+
+Each monitor in the main window has a dedicated brightness slider. You can interact with it in several ways:
+
+<CardGroup cols={2}>
+  <Card title="Drag the Slider" icon="hand-pointer">
+    Click and drag the slider thumb left or right to set brightness to any value between 0 and 100%.
+  </Card>
+  <Card title="Mouse Wheel" icon="computer-mouse">
+    Hover over a slider and scroll the mouse wheel up or down to increase or decrease brightness in steps.
+  </Card>
+  <Card title="Arrow Keys" icon="arrow-right">
+    Click a slider to focus it, then press the left/right arrow keys to adjust brightness one step at a time.
+  </Card>
+  <Card title="Precision Touchpad" icon="hand">
+    Place two fingers on a precision touchpad and swipe horizontally to adjust the brightness of the focused monitor.
+  </Card>
+</CardGroup>
+
+### Mouse Wheel on the Tray Icon
+
+You can scroll the mouse wheel directly on the Monitorian system tray icon to adjust brightness without opening the main window. This adjusts the currently selected monitor (or the first controllable monitor if none is selected). The `/iconwheel` command-line argument must be passed to Monitorian to enable this feature.
+
+### Inverting Scroll Direction
+
+The scroll direction for all input methods can be inverted independently. The `InvertsScrollDirection` setting is a set of flags that applies separately to:
+
+- Mouse vertical wheel
+- Mouse horizontal wheel
+- Touchpad vertical swipe
+- Touchpad horizontal swipe
+
+The default value inverts all inputs except the mouse vertical wheel. You can change this in the Monitorian settings menu.
+
+## Showing Adjusted vs. Configured Brightness
+
+On systems with an ambient light sensor, the OS may automatically adjust the configured brightness level. Monitorian can display both values simultaneously when the `ShowsAdjusted` setting is enabled (it is on by default).
+
+<Info>
+When **ShowsAdjusted** is enabled, the slider reflects the brightness value that was manually set (adjusted), while a secondary indicator shows the current brightness as configured by the ambient light sensor. This helps you understand the difference between your intent and the OS override.
+</Info>
+
+## SDR Content Brightness for HDR Displays
+
+When a monitor is operating in HDR mode, Windows controls SDR content brightness separately via a white level value. Enabling the `AdjustsSdrContent` setting allows Monitorian to read and reflect this SDR white level as the brightness value for HDR-capable monitors, so the slider stays meaningful even when HDR is active.
+
+<Steps>
+  <Step title="Open the settings menu">
+    Right-click the Monitorian tray icon to open the menu window, then navigate to the settings section.
+  </Step>
+  <Step title="Enable SDR content brightness">
+    Toggle the **AdjustsSdrContent** option. Monitorian will begin monitoring the display information watcher for SDR white level changes.
+  </Step>
+  <Step title="Adjust as normal">
+    The brightness slider for HDR displays now reflects SDR content brightness. Drag the slider or use any supported input method to change it.
+  </Step>
+</Steps>
+
+## Renaming Monitors
+
+Monitor names shown in the main window default to the hardware description reported by the OS. To rename a monitor for easier identification, **press and hold the monitor name** until it becomes an editable text field, type the new name, and confirm. Custom names persist per Device Instance ID.

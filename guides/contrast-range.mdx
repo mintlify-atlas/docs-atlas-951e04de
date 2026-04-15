@@ -1,0 +1,59 @@
+---
+title: "Contrast Control and Brightness Range in Monitorian"
+description: "Enable contrast adjustment and customize the minimum and maximum brightness range per monitor in Monitorian, with settings that persist per Device Instance ID."
+---
+
+Monitorian supports two advanced controls beyond basic brightness: a contrast slider and an adjustable brightness range. Both are disabled by default and must be enabled in settings. Once enabled, contrast is adjusted with a dedicated slider, and the brightness range lets you restrict each monitor's effective brightness band — for example, preventing a monitor from ever going below 20% or above 80%. All per-monitor range customizations are saved to disk and restored automatically.
+
+## Enabling Contrast Control
+
+The contrast slider is hidden until `EnablesContrast` is turned on. Not all monitors support contrast adjustment via DDC/CI; if a monitor does not, the contrast slider will not appear for that monitor even when the setting is enabled.
+
+<Steps>
+  <Step title="Open the settings menu">
+    Right-click the Monitorian tray icon to open the menu window, then go to settings.
+  </Step>
+  <Step title="Enable contrast">
+    Toggle the **EnablesContrast** option. A contrast slider will appear below the brightness slider for each monitor that reports DDC/CI contrast support.
+  </Step>
+  <Step title="Adjust contrast">
+    Interact with the contrast slider using the same inputs available for brightness: drag, mouse wheel, or arrow keys. Contrast values range from 0 to 100%.
+  </Step>
+</Steps>
+
+<Warning>
+If contrast is not supported by a monitor, no contrast slider will be shown for it. When queried via command-line (`/get contrast`), unsupported monitors return `-` instead of a numeric value.
+</Warning>
+
+## Enabling the Adjustable Range
+
+The range feature allows you to set a custom lowest and highest brightness boundary for each monitor individually. Adjusting the range does not change the current brightness — it restricts the range the slider can reach. This is useful for monitors that are too bright at 100% or uncomfortable below a certain level.
+
+<Steps>
+  <Step title="Enable range adjustment">
+    In the settings menu, toggle **EnablesRange**. Each monitor card will display small additional controls for the lower and upper bounds of its brightness range.
+  </Step>
+  <Step title="Set the lowest brightness">
+    Drag the lower range control to the desired minimum value. The main brightness slider will clamp to this value as its lower bound.
+  </Step>
+  <Step title="Set the highest brightness">
+    Drag the upper range control to the desired maximum value. The main brightness slider will treat this as 100% of the usable range.
+  </Step>
+  <Step title="Adjust brightness within the range">
+    Use the main slider or any supported input method as normal. Brightness will be constrained to the configured range. Attempting to go below the lowest or above the highest will stop at the boundary.
+  </Step>
+</Steps>
+
+<Note>
+Range boundaries are stored as part of the monitor's customization entry, keyed by the monitor's Device Instance ID. Each monitor retains its own range settings independently, and they are restored the next time Monitorian starts.
+</Note>
+
+## How Range and Contrast Interact
+
+When `EnablesRange` is disabled, Monitorian clears the `IsRangeChanging` flag on all monitors, resetting them to the full 0–100% range in the current session. Saved range values in the customization store are preserved and will be reloaded if the range feature is re-enabled later.
+
+Similarly, disabling `EnablesContrast` clears the `IsContrastChanging` flag on all monitors, stopping any active contrast adjustment without erasing stored state.
+
+<Tip>
+Use the range feature to match brightness levels across monitors that have different hardware brightness responses. For example, if one monitor looks much brighter than another at equal settings, reduce its highest range value until the perceived brightness matches.
+</Tip>

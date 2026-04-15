@@ -1,0 +1,70 @@
+---
+title: "Monitorian System Requirements: Windows and DDC/CI"
+description: "Monitorian needs Windows 7 or newer and .NET Framework 4.8. External monitors need DDC/CI enabled. The Store version requires Windows 10 1607 or later."
+---
+
+Monitorian has modest system requirements, but controlling external monitors adds a hardware dependency: the monitor, cable, and connector must all support DDC/CI. This page covers everything you need to verify before installing.
+
+## Software requirements
+
+| Requirement | Details |
+|---|---|
+| **Operating system** | Windows 7 or newer |
+| **OS (Microsoft Store version)** | Windows 10 version 1607 or newer |
+| **.NET Framework** | 4.8 |
+
+.NET Framework 4.8 is included with Windows 10 May 2019 Update (version 1903) and later. On older Windows versions, you may need to install it separately from Microsoft's website.
+
+## Monitor requirements
+
+### Internal monitors
+
+Internal monitors (built-in laptop displays) are controlled through Windows Management Instrumentation (WMI) and work automatically on supported hardware. No additional configuration is needed.
+
+### External monitors
+
+<Warning>
+External monitors must have **DDC/CI (Display Data Channel Command Interface) enabled** to appear in Monitorian. If DDC/CI is disabled on the monitor or not supported by the cable or connector, the monitor will not be detected or controllable.
+</Warning>
+
+DDC/CI is a VESA-standard protocol that allows a PC to send commands — such as brightness and contrast changes — to a monitor over the video cable. Monitorian uses this channel to read and set brightness and contrast values on external displays.
+
+To enable DDC/CI, access your monitor's **OSD (on-screen display) menu** using the physical buttons on the monitor. The setting is typically found under a section labelled **System**, **Setup**, **General**, or similar. Look for an option named **DDC/CI** and set it to **On** or **Enabled**.
+
+## Display limit
+
+Monitorian shows up to **4 monitors** at a time in the control panel. If more than 4 monitors are connected, only the first 4 detected are shown.
+
+## Connection compatibility
+
+The following connection considerations affect whether DDC/CI works for external monitors:
+
+<AccordionGroup>
+  <Accordion title="Cables and adapters">
+    The cable between the PC and monitor must carry the DDC signal. Standard HDMI, DisplayPort, and DVI cables are generally compatible. **Converters and adapters are often not compatible** — for example, a USB-C to HDMI adapter may not pass the DDC signal through.
+  </Accordion>
+  <Accordion title="Docking stations">
+    Not all docking stations pass DDC/CI. **Surface Dock and Surface Dock 2 are known to be compatible**. Thunderbolt/USB-C cables are generally compatible, but docking station compatibility varies by model.
+  </Accordion>
+  <Accordion title="PC connectors">
+    Some PC connectors — particularly certain USB-C DisplayPort Alt mode implementations — do not support DDC/CI. If your monitor works fine through another connector type, try that instead.
+  </Accordion>
+  <Accordion title="Monitor firmware and quirks">
+    Some monitors report that they support DDC/CI but do not return correct capabilities information. In these cases, Monitorian treats the monitor as uncontrollable. This is a hardware limitation and cannot be resolved in software.
+  </Accordion>
+</AccordionGroup>
+
+## Identifying your Windows version
+
+To check your Windows version and build number, press `Win + R`, type `winver`, and press **Enter**. The dialog shows your edition and version number.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Installation" icon="download" href="/installation">
+    Install Monitorian from the Microsoft Store, winget, or a direct installer
+  </Card>
+  <Card title="Troubleshooting external monitors" icon="wrench" href="/troubleshooting/external-monitors">
+    Diagnose why an external monitor is not detected or controllable
+  </Card>
+</CardGroup>

@@ -1,0 +1,68 @@
+---
+title: "Setting Up the Monitorian Development Environment"
+description: "Step-by-step instructions for configuring Visual Studio, installing required SDK components, and building the Monitorian WPF solution from source."
+---
+
+Monitorian is a WPF application developed and tested on Surface Pro hardware. Setting up the development environment requires Visual Studio with specific individual components installed, plus one Visual Studio extension. Follow the steps below to get a working build.
+
+## Requirements
+
+The following components must be installed before opening the solution. All SDK components are installed through the Visual Studio Installer.
+
+| Component | Requirement |
+|---|---|
+| .NET Framework 4.8 SDK | Version must match `TargetFrameworkVersion` in each project's `.csproj` file |
+| .NET Framework 4.8 targeting pack | Required alongside the SDK |
+| Windows 10 or 11 SDK | Version must be **10.0.19041.0** or newer |
+| HeatWave for VS2022 | Visual Studio extension, installed via Extension Manager |
+
+## Setup steps
+
+<Steps>
+  <Step title="Install Visual Studio">
+    Download and run the [Visual Studio installer](https://docs.microsoft.com/en-us/visualstudio/install/install-visual-studio). Any edition (Community, Professional, or Enterprise) will work.
+  </Step>
+
+  <Step title="Install required Individual components">
+    Open **Visual Studio Installer** and click **Modify** on your Visual Studio installation. Navigate to the **Individual components** tab and ensure the following are checked and installed:
+
+    - **.NET Framework 4.8 SDK**
+    - **.NET Framework 4.8 targeting pack**
+    - **Windows 10 SDK** or **Windows 11 SDK** at version **10.0.19041.0** or newer
+  </Step>
+
+  <Step title="Install HeatWave for VS2022">
+    In Visual Studio, open **Extensions** → **Manage Extensions** and search for **HeatWave for VS2022**. Install it and restart Visual Studio when prompted.
+  </Step>
+
+  <Step title="Open the solution">
+    Open the solution file at `Source/Monitorian.sln` in Visual Studio.
+  </Step>
+
+  <Step title="Restore NuGet packages">
+    In **Solution Explorer**, right-click the solution name at the top and select **Restore NuGet Packages**.
+  </Step>
+</Steps>
+
+## Project structure
+
+The solution at `Source/Monitorian.sln` contains the following projects:
+
+| Project | Path | Description |
+|---|---|---|
+| Monitorian | `Source/Monitorian/` | Main application project |
+| Monitorian.Core | `Source/Monitorian.Core/` | Core library shared by the app |
+| ScreenFrame | `Source/ScreenFrame/` | Helper library for screen and window placement |
+| StartupAgency | `Source/StartupAgency/` | Startup management library |
+| Monitorian.Test | `Source/Monitorian.Test/` | Test project |
+| Installer | `Source/Installer/` | WiX-based installer project |
+
+## Libraries
+
+| Library | Source |
+|---|---|
+| [XamlBehaviors for WPF](https://github.com/microsoft/XamlBehaviorsWpf) | Microsoft / NuGet |
+
+## Reference standard
+
+Monitorian's DDC/CI implementation follows the **VESA Monitor Control Command Set (MCCS)** standard, which defines the protocol for getting and setting monitor parameters such as brightness and contrast over DDC/CI.

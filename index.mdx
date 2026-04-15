@@ -1,97 +1,61 @@
 ---
-title: "Introduction"
-description: "Welcome to the new home for your documentation"
+title: "Monitorian: Multi-Monitor Brightness Control for Windows"
+description: "Monitorian adjusts brightness and contrast on multiple monitors — including external DDC/CI displays — from the Windows system tray. No OSD menus needed."
 ---
 
-## Setting up
+Monitorian lets you take control of every display connected to your Windows PC. Whether you have one monitor or several, you can fine-tune brightness and contrast from the system tray — no OSD menus required. External monitors are supported via DDC/CI, and all adjustments can be made individually or simultaneously.
 
-Get your documentation site up and running in minutes.
-
-<Card
-  title="Start here"
-  icon="rocket"
-  href="/quickstart"
-  horizontal
->
-  Follow our three step quickstart guide.
-</Card>
-
-## Make it yours
-
-Design a docs site that looks great and empowers your users.
-
-<Columns cols={2}>
-  <Card
-    title="Edit locally"
-    icon="pen-to-square"
-    href="/development"
-  >
-    Edit your docs locally and preview them in real time.
+<CardGroup cols={2}>
+  <Card title="Get Started" icon="rocket" href="/introduction">
+    Learn what Monitorian is and how it controls your monitors
   </Card>
-  <Card
-    title="Customize your site"
-    icon="palette"
-    href="/essentials/settings"
-  >
-    Customize the design and colors of your site to match your brand.
+  <Card title="Installation" icon="download" href="/installation">
+    Install from the Microsoft Store, winget, or a direct installer
   </Card>
-    <Card
-    title="Set up navigation"
-    icon="map"
-    href="/essentials/navigation"
-  >
-    Organize your docs to help users find what they need and succeed with your product.
+  <Card title="Brightness Control" icon="sun" href="/guides/brightness-control">
+    Adjust brightness on internal and external monitors
   </Card>
-  <Card
-    title="API documentation"
-    icon="terminal"
-    href="/api-reference/introduction"
-  >
-    Auto-generate API documentation from OpenAPI specifications.
+  <Card title="Command-line Interface" icon="terminal" href="/addons/command-line">
+    Automate brightness with command-line options (add-on)
   </Card>
-</Columns>
+</CardGroup>
 
-## Create beautiful pages
+## Get up and running
 
-Everything you need to create world-class documentation.
+<Steps>
+  <Step title="Check requirements">
+    Ensure you're running Windows 7 or newer with .NET Framework 4.8. For external monitors, DDC/CI must be enabled on the display. See [Requirements](/requirements).
+  </Step>
+  <Step title="Install Monitorian">
+    Download from the [Microsoft Store](https://www.microsoft.com/store/apps/9nw33j738bl0), use `winget install Monitorian -s msstore`, or grab the [direct installer](https://github.com/emoacht/Monitorian/releases). See [Installation](/installation).
+  </Step>
+  <Step title="Adjust brightness">
+    Click the Monitorian icon in your system tray. Drag the slider for any detected monitor to change brightness. Use the unison toggle to move all monitors together.
+  </Step>
+  <Step title="Explore add-on features">
+    Unlock hot keys, command-line control, and automation commands with the Microsoft Store subscription add-on. See [Add-on Features](/addons/hotkeys).
+  </Step>
+</Steps>
 
-<Columns cols={2}>
-  <Card
-    title="Write with MDX"
-    icon="pen-fancy"
-    href="/essentials/markdown"
-  >
-    Use MDX to style your docs pages.
-  </Card>
-  <Card
-    title="Code samples"
-    icon="code"
-    href="/essentials/code"
-  >
-    Add sample code to demonstrate how to use your product.
-  </Card>
-  <Card
-    title="Images"
-    icon="image"
-    href="/essentials/images"
-  >
-    Display images and other media.
-  </Card>
-  <Card
-    title="Reusable snippets"
-    icon="recycle"
-    href="/essentials/reusable-snippets"
-  >
-    Write once and reuse across your docs.
-  </Card>
-</Columns>
+## Key features
 
-## Need inspiration?
-
-<Card
-  title="See complete examples"
-  icon="stars"
-  href="https://mintlify.com/customers"
->
-  Browse our showcase of exceptional documentation sites.
-</Card>
+<CardGroup cols={2}>
+  <Card title="Unison mode" icon="sliders" href="/guides/unison-mode">
+    Link monitors together so a single slider adjusts all displays at once
+  </Card>
+  <Card title="Contrast and range control" icon="circle-half-stroke" href="/guides/contrast-range">
+    Customize the adjustable range and tweak contrast per monitor
+  </Card>
+  <Card title="Hot keys" icon="keyboard" href="/addons/hotkeys">
+    Assign keyboard shortcuts to brightness and contrast actions
+  </Card>
+  <Card title="Advanced commands" icon="code" href="/addons/advanced-commands">
+    Trigger brightness changes by condition, schedule, or hot key via JSON
+  </Card>
+  <Card title="Troubleshooting" icon="wrench" href="/troubleshooting/external-monitors">
+    Diagnose why an external monitor is not detected or controllable
+  </Card>
+  <Card title="Contributing" icon="code-pull-request" href="/development/contributing">
+    Add a language, fix a bug, or propose a new feature
+  </Card>
+</CardGroup>

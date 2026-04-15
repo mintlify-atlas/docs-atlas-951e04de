@@ -1,0 +1,87 @@
+---
+title: "Installing Monitorian on Windows: Three Methods Explained"
+description: "Install Monitorian via the Microsoft Store, winget, or a direct GitHub installer. Covers MSI extraction, settings file location, and startup registry key."
+---
+
+Monitorian is available through three installation methods. The Microsoft Store version supports add-on features and receives updates automatically. The direct installer is suitable for environments where Store access is restricted. All methods install the same core application.
+
+## Choose an installation method
+
+<Tabs>
+  <Tab title="Microsoft Store">
+    The Microsoft Store version is recommended for most users. It supports automatic updates and is required for add-on features (hot keys, command-line options, and advanced commands).
+
+    **Minimum requirement:** Windows 10 version 1607 or newer.
+
+    <Steps>
+      <Step title="Open the Store listing">
+        Visit the Monitorian page in the Microsoft Store:
+
+        [https://www.microsoft.com/store/apps/9nw33j738bl0](https://www.microsoft.com/store/apps/9nw33j738bl0)
+      </Step>
+      <Step title="Install the app">
+        Click **Get** or **Install** on the Store page. The app installs automatically and appears in your Start menu and system tray on next launch.
+      </Step>
+    </Steps>
+  </Tab>
+  <Tab title="winget">
+    If you have the Windows Package Manager (`winget`) installed via **App Installer**, you can install Monitorian from the command line. This installs the Microsoft Store version.
+
+    **Minimum requirement:** Windows 10 version 1607 or newer.
+
+    <Steps>
+      <Step title="Open a terminal">
+        Open **Command Prompt**, **PowerShell**, or **Windows Terminal**.
+      </Step>
+      <Step title="Run the install command">
+        ```powershell
+        winget install Monitorian -s msstore
+        ```
+      </Step>
+    </Steps>
+
+    <Tip>
+      `winget` is included with Windows 10 (1709+) and later via the App Installer package. If the command is not found, install App Installer from the Microsoft Store.
+    </Tip>
+  </Tab>
+  <Tab title="Direct installer">
+    The direct installer from GitHub Releases works on Windows 7 or newer and does not require Microsoft Store access. Add-on features are not available with this build.
+
+    <Steps>
+      <Step title="Download the installer">
+        Go to the [Monitorian GitHub Releases page](https://github.com/emoacht/Monitorian/releases) and download the latest installer archive (`.zip` file containing a `.msi`).
+      </Step>
+      <Step title="Extract the archive">
+        Extract the `.zip` file to get the `.msi` installer.
+      </Step>
+      <Step title="Run the installer">
+        Double-click the `.msi` file and follow the setup wizard to complete installation.
+      </Step>
+    </Steps>
+
+    ### Manual extraction (optional)
+
+    If you prefer to run Monitorian without a traditional installation — for example, from a portable folder — you can extract the executable files directly from the `.msi` without running the installer wizard:
+
+    ```powershell
+    msiexec /a [source msi file path] targetdir=[destination folder path (absolute path)] /qn
+    ```
+
+    Replace `[source msi file path]` with the full path to the `.msi` file and `[destination folder path (absolute path)]` with the absolute path of the folder where you want the files placed.
+
+    <Note>
+      When running Monitorian from a manually extracted location, be aware of the following:
+
+      - **Settings file location:** `[system drive]\Users\[user name]\AppData\Local\Monitorian\`
+      - **Startup registry entry:** When you enable **Start on sign in**, a value is written to `HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run`
+    </Note>
+  </Tab>
+</Tabs>
+
+## After installation
+
+Once Monitorian is running, its icon appears in the system tray. Click the icon to open the brightness control panel. Monitorian scans for connected monitors on launch and adjusts the list automatically when displays are added or removed.
+
+<Tip>
+If an external monitor does not appear in the panel, check that DDC/CI is enabled in the monitor's OSD menu. See [Requirements](/requirements) and [Troubleshooting external monitors](/troubleshooting/external-monitors) for a full checklist.
+</Tip>

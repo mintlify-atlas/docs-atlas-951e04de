@@ -1,0 +1,56 @@
+---
+title: "Why External Monitors Don't Appear in Monitorian"
+description: "Learn the six hardware reasons an external monitor may not be detected by Monitorian via DDC/CI, and understand what can and cannot be fixed by the app."
+---
+
+Monitorian controls external monitor brightness and contrast using DDC/CI, a protocol that lets software communicate with a monitor over its video cable. Before showing a monitor in the UI, Monitorian requests the monitor's capabilities information via DDC/CI and checks whether that response includes the ability to get and set brightness. If the capabilities information is not received, or if those specific capabilities are not listed, the monitor is regarded as not controllable and will not appear in the app.
+
+<Warning>
+  In the vast majority of cases, a missing external monitor is caused by a hardware-level incompatibility that Monitorian cannot work around. The app can only control monitors that successfully respond to DDC/CI commands. If your monitor does not appear, the cause is almost certainly one of the six hardware reasons below — not a bug in the app.
+</Warning>
+
+## How detection works
+
+Monitorian queries each connected monitor for its DDC/CI capabilities string. This string lists the functions the monitor supports, including Virtual Control Panel (VCP) codes for brightness (`10h`) and, optionally, contrast (`12h`). If the monitor does not respond or the response omits those codes, Monitorian treats the monitor as uncontrollable.
+
+<Note>
+  Even the same physical monitor can appear under a different Device Instance ID depending on which connector it is plugged into. Reconnecting a monitor to a different port may cause Monitorian to treat it as a new, unknown monitor.
+</Note>
+
+## Common hardware reasons
+
+<AccordionGroup>
+  <Accordion title="1. The monitor model does not support DDC/CI">
+    DDC/CI is a feature that must be implemented by the monitor manufacturer. Some monitors — particularly older, budget, or specialized display models — were never built with DDC/CI support. There is no software workaround for this; the monitor must support the protocol at a hardware level for Monitorian to control it.
+  </Accordion>
+
+  <Accordion title="2. The monitor's DDC/CI setting is turned off">
+    Most DDC/CI-capable monitors ship with the feature enabled, but some ship with it disabled, and it can be toggled off by accident. The setting is typically found in the monitor's on-screen display (OSD) menu, often under an "Input," "Setup," or "Advanced" submenu. Look for an option labeled **DDC/CI** and make sure it is set to **On**. The exact location varies by monitor manufacturer and model.
+  </Accordion>
+
+  <Accordion title="3. The monitor's DDC/CI implementation is non-standard">
+    Some monitors claim to support DDC/CI but return incorrect or incomplete capabilities information. For example, a monitor may respond to the capabilities request but omit the brightness VCP code from its reported string, even though the monitor does in fact have a brightness control. Monitorian has no way to distinguish an intentionally absent feature from a malformed response, so these monitors are excluded from the controllable list.
+  </Accordion>
+
+  <Accordion title="4. The PC's connector does not support DDC/CI">
+    Not every video output on a PC carries the DDC/CI signaling channel. Some integrated graphics outputs, adapter cards, or ports added via USB graphics adapters do not support the auxiliary DDC channel required for DDC/CI communication. If the port itself cannot carry DDC/CI traffic, no amount of monitor or cable configuration will make it work.
+  </Accordion>
+
+  <Accordion title="5. The cable, converter, or docking station is not DDC/CI compatible">
+    DDC/CI requires that every link in the chain between the PC and the monitor passes the auxiliary DDC channel through intact.
+
+    - **Cables:** Thunderbolt and USB-C cables are generally compatible with DDC/CI passthrough.
+    - **Converters and adapters:** Active signal converters (e.g., DisplayPort-to-HDMI active adapters) typically break the DDC channel and are not compatible.
+    - **Docking stations:** Most docking stations do not forward the DDC/CI channel. **Surface Dock** and **Surface Dock 2** are known exceptions and are compatible with DDC/CI.
+
+    If you are using any intermediate device between the PC and the monitor, try connecting directly with a single cable to determine whether the intermediate device is the cause.
+  </Accordion>
+
+  <Accordion title="6. Contact failure or hardware issues on older monitors or PCs">
+    Physical connector wear, dust, or oxidation on the video port pins can intermittently interrupt the DDC channel even when the video signal itself looks fine. This is particularly common with older monitors that have seen years of cable connect-and-disconnect cycles. Reseating the cable, cleaning the connector contacts, or trying a different cable can sometimes resolve this.
+  </Accordion>
+</AccordionGroup>
+
+## Next steps
+
+If none of the above explanations resolve the issue and you believe the problem is worth investigating further, collect Monitorian's diagnostic logs and report the issue. See [Collecting Logs](/troubleshooting/logs) for how to generate `probe.log` and `operation.log`, and [Reporting Issues](/troubleshooting/reporting-issues) for what to include in a GitHub issue report.

@@ -1,0 +1,87 @@
+{
+  "projectType": "saas",
+  "projectName": "Monitorian",
+  "projectDescription": "A Windows desktop application that lets you adjust the brightness and contrast of multiple monitors — including external DDC/CI-enabled displays — from the system tray.",
+  "theme": "almond",
+  "primaryColor": "#04a4ec",
+  "lightColor": "#d1960e",
+  "darkColor": "#fc5c2c",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              "installation",
+              "requirements"
+            ]
+          },
+          {
+            "group": "Using Monitorian",
+            "pages": [
+              "guides/brightness-control",
+              "guides/contrast-range",
+              "guides/unison-mode",
+              "guides/monitor-customization"
+            ]
+          },
+          {
+            "group": "Add-on Features",
+            "pages": [
+              "addons/hotkeys",
+              "addons/command-line",
+              "addons/advanced-commands"
+            ]
+          },
+          {
+            "group": "Troubleshooting",
+            "pages": [
+              "troubleshooting/external-monitors",
+              "troubleshooting/reporting-issues",
+              "troubleshooting/logs"
+            ]
+          },
+          {
+            "group": "Development",
+            "pages": [
+              "development/contributing",
+              "development/setup",
+              "development/localization"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "Adjust brightness of multiple monitors (internal and external DDC/CI) from the system tray",
+    "Unison mode to change all monitor brightness simultaneously",
+    "Customizable brightness and contrast ranges per monitor",
+    "SDR content brightness adjustment for HDR displays",
+    "Command-line interface for get/set brightness and contrast (add-on)",
+    "Hot keys and shortcut keys for brightness/contrast control (add-on)",
+    "Conditional, time-based, and key-triggered automation commands (add-on)",
+    "Precision touchpad and mouse wheel support",
+    "Ambient light sensor display support",
+    "Multi-language support (20+ languages)"
+  ],
+  "publicApiSurface": [
+    "/get [Device Instance ID] — Get brightness of a monitor",
+    "/get all — Get brightness of all monitors",
+    "/set [Brightness] — Set brightness of a monitor",
+    "/set all [Brightness] — Set brightness of all monitors",
+    "/get contrast [Device Instance ID] — Get contrast of a monitor",
+    "/set contrast [Device Instance ID] [Value] — Set contrast of a monitor",
+    "/get input [Device Instance ID] — Get input source of a monitor",
+    "/load [file path] — Load commands from a JSON file",
+    "/unload — Unload all loaded commands",
+    "/preclude [Device Instance ID] — Exclude a monitor from detection",
+    "/preclear [Device Instance ID] — Force-include a monitor bypassing capability check",
+    "Conditional Commands JSON (SetBrightness, SetContrast triggered by monitor brightness condition)",
+    "Time Commands JSON (SetBrightness, SetContrast triggered at scheduled daily times)",
+    "Key Commands JSON (SetBrightness, SetContrast, SetInput, IncrementBrightness, DecrementBrightness triggered by hot key)"
+  ]
+}

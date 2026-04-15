@@ -1,0 +1,67 @@
+---
+title: "How to Report a Monitor Controllability Issue"
+description: "Step-by-step guide for filing a useful Monitorian bug report on GitHub, including which log files are required and how to search for existing issues first."
+---
+
+Monitorian relies on DDC/CI to communicate with external monitors, and whether a monitor responds correctly depends on hardware factors that vary between devices. If you have worked through the [external monitor detection guide](/troubleshooting/external-monitors) and still believe the behavior you are seeing is worth reporting, this page explains how to file an effective issue on GitHub.
+
+<Warning>
+  Every report about monitor controllability **must** include `probe.log` and `operation.log`. Issues filed without these logs provide no starting point for investigation and may be closed without review. See [Collecting Logs](/troubleshooting/logs) for how to generate them.
+</Warning>
+
+## Before you open an issue
+
+<Steps>
+  <Step title="Read the documentation">
+    Make sure you have read through the [external monitor detection](/troubleshooting/external-monitors) page. Avoid asking questions that are already answered there — issues that duplicate documented information may be closed without review.
+  </Step>
+
+  <Step title="Search existing issues">
+    Visit [github.com/emoacht/Monitorian/issues](https://github.com/emoacht/Monitorian/issues) and search for reports that describe your situation. To search both open and closed issues at the same time, remove `is:open` from the default filter syntax in the search box and use only the `is:issue` syntax. Your issue may already have a documented workaround or an in-progress fix.
+  </Step>
+
+  <Step title="Collect your logs">
+    Generate `probe.log` and `operation.log` using the hidden menu before writing your report. The logs are the primary evidence that the maintainer needs to understand what is happening on your specific hardware. Refer to [Collecting Logs](/troubleshooting/logs) for the full procedure.
+  </Step>
+</Steps>
+
+## Writing the report
+
+<Steps>
+  <Step title="Describe the issue clearly">
+    Write a description that a reader with no knowledge of your monitor, PC, or connection setup can understand. Include enough context that someone unfamiliar with your hardware can follow along and, ideally, reproduce what you are seeing.
+  </Step>
+
+  <Step title="Include your hardware details">
+    Specify at minimum:
+
+    - Monitor model name and manufacturer
+    - Connection type (e.g., HDMI, DisplayPort, USB-C, Thunderbolt)
+    - Any cables, converters, or docking stations between the PC and monitor
+    - PC model or graphics card, if relevant
+  </Step>
+
+  <Step title="Attach probe.log and operation.log">
+    Attach both log files directly to the GitHub issue. These logs contain raw DDC/CI capability data and scan operation records that are the starting point for any investigation.
+
+    <Note>
+      A video clip of the problem is not a useful substitute for the logs. A video cannot show the internal state of DDC/CI communication; only the log files can.
+    </Note>
+  </Step>
+
+  <Step title="Submit the issue">
+    Open a new issue at [github.com/emoacht/Monitorian/issues](https://github.com/emoacht/Monitorian/issues) with all of the above information included.
+  </Step>
+</Steps>
+
+## After filing
+
+<AccordionGroup>
+  <Accordion title="Be ready to respond">
+    In most cases you will be asked to provide additional information after opening an issue. Be prepared to respond to follow-up requests. Issues where the reporter becomes unresponsive may be closed.
+  </Accordion>
+
+  <Accordion title="Keep discussion on GitHub">
+    Do not send comments or follow-ups by email. All communication about an issue should happen in the GitHub issue thread, where it remains visible and searchable for other users.
+  </Accordion>
+</AccordionGroup>

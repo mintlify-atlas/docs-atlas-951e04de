@@ -1,0 +1,74 @@
+---
+title: "Introduction to Monitorian: Monitor Brightness Control"
+description: "Monitorian controls brightness and contrast on multiple monitors from the system tray, using WMI for internal panels and DDC/CI for external displays."
+---
+
+Monitorian is a Windows desktop application that puts monitor brightness and contrast control in your system tray. Instead of reaching for physical buttons or navigating on-screen display (OSD) menus, you adjust every connected display with a slider — individually or all at once. It supports both internal laptop panels and external monitors, using different control methods for each type.
+
+## How Monitorian controls your monitors
+
+Monitorian uses two different communication paths depending on the monitor type:
+
+- **Internal monitors** (laptop panels) are controlled via Windows Management Instrumentation (WMI). The OS exposes brightness control through the `WmiMonitorBrightnessMethods` interface, and Monitorian reads and writes values through that channel.
+- **External monitors** are controlled via DDC/CI (Display Data Channel Command Interface), a standard defined by VESA that allows a PC to send commands to a monitor over the same cable carrying video. Monitorian sends brightness and contrast commands conforming to the VESA Monitor Control Command Set (MCCS) standard.
+
+Because DDC/CI is a hardware-level protocol, your external monitor must have DDC/CI enabled in its own settings and your cable or docking station must carry the signal. See [Requirements](/requirements) for details.
+
+## Key features
+
+<CardGroup cols={2}>
+  <Card title="Multi-monitor brightness" icon="sun">
+    Adjust brightness on up to 4 monitors at a time — internal and external — from a single system tray panel
+  </Card>
+  <Card title="Contrast control" icon="circle-half-stroke">
+    Fine-tune contrast per monitor and set custom adjustable ranges for both brightness and contrast
+  </Card>
+  <Card title="Unison mode" icon="sliders">
+    Link monitors together so moving one slider adjusts all displays simultaneously, keeping them in sync
+  </Card>
+  <Card title="Ambient light display" icon="eye">
+    On systems with an ambient light sensor, Monitorian shows the automatically configured brightness alongside your manual adjustment
+  </Card>
+  <Card title="Touchpad and mouse wheel" icon="hand-pointer">
+    Adjust brightness by scrolling the mouse wheel over a slider or swiping horizontally on a precision touchpad
+  </Card>
+  <Card title="Rename monitors" icon="pen">
+    Give each monitor a custom name to tell them apart — press and hold the name in the panel until it becomes editable
+  </Card>
+</CardGroup>
+
+## Internal vs. external monitors
+
+The control method Monitorian uses determines what's possible for each display:
+
+| Monitor type | Control method | Requirements |
+|---|---|---|
+| Internal (laptop panel) | WMI (`WmiMonitorBrightnessMethods`) | Supported automatically on Windows |
+| External | DDC/CI over video cable | DDC/CI enabled in monitor OSD; compatible cable and connector |
+
+If an external monitor does not appear in Monitorian, it is almost always because DDC/CI is disabled on the monitor, the cable does not carry the DDC signal, or the monitor does not support the brightness capability in its DDC/CI response. Converters and some docking stations are common culprits. See [Troubleshooting external monitors](/troubleshooting/external-monitors) for a full diagnostic checklist.
+
+## Add-on features
+
+Additional features are available for the Microsoft Store version on a subscription basis. These include:
+
+- **Hot keys** — assign keyboard shortcuts to increase or decrease brightness and contrast
+- **Command-line options** — get or set brightness and contrast from scripts, shortcuts, and Task Scheduler
+- **Advanced commands** — conditional commands, time-based commands, and key commands defined in a flexible JSON format
+
+The source code for add-on features is not included in the open-source repository.
+
+<Note>
+Add-on features require the Microsoft Store version of Monitorian. They are not available in the direct installer build.
+</Note>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Installation" icon="download" href="/installation">
+    Install Monitorian from the Microsoft Store, winget, or a direct installer
+  </Card>
+  <Card title="Requirements" icon="circle-check" href="/requirements">
+    Check Windows version, .NET, and DDC/CI requirements before installing
+  </Card>
+</CardGroup>

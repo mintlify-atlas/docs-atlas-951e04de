@@ -1,0 +1,86 @@
+---
+title: "Customizing Monitor Names and Display Options"
+description: "Rename monitors, view Device Instance IDs, sort by physical arrangement, and configure large elements and accent color for the Monitorian brightness slider UI."
+---
+
+Monitorian stores a customization record for each monitor it has seen, keyed by the monitor's Device Instance ID. This record holds the custom name, unison preference, and brightness range. Beyond per-monitor settings, several global display options control how the main window looks and how monitors are ordered. This page covers all of these options.
+
+## Renaming a Monitor
+
+Monitor names default to the hardware description string reported by the operating system. Descriptive names like "DELL U2722D" or "LG ULTRAFINE" help when you have multiple monitors of the same model.
+
+<Steps>
+  <Step title="Open the main window">
+    Click the Monitorian tray icon to open the main window.
+  </Step>
+  <Step title="Press and hold the monitor name">
+    Locate the monitor whose name you want to change. **Press and hold** on its name label until the label turns into an editable text field.
+  </Step>
+  <Step title="Type the new name">
+    Enter the name you want. Leave the field blank to revert to the hardware-reported description.
+  </Step>
+  <Step title="Confirm">
+    Click or tap outside the field to save. The name is immediately stored in the customization record for that monitor's Device Instance ID.
+  </Step>
+</Steps>
+
+<Tip>
+Custom names make it easy to target specific monitors with command-line options. The `/get` and `/set` commands display monitor names in their output, so a meaningful name helps identify which line belongs to which physical display.
+</Tip>
+
+## Monitor Identity Display
+
+Monitorian can show the Device Instance ID for each monitor directly in the main window. This is controlled by the `EnablesIdentity` setting, which is **enabled by default**.
+
+<CardGroup cols={2}>
+  <Card title="What It Shows" icon="id-card">
+    When enabled, the Device Instance ID is displayed beneath or alongside the monitor name in the main window.
+  </Card>
+  <Card title="Why It Matters" icon="magnifying-glass">
+    The Device Instance ID is the unique identifier Monitorian uses to store per-monitor customizations, and it is required for targeted command-line operations.
+  </Card>
+</CardGroup>
+
+To hide the identity display, toggle **EnablesIdentity** off in the settings menu. Disabling it clears the `IsIdentityShown` flag on all monitors in the current session.
+
+## Understanding the Device Instance ID
+
+The Device Instance ID is a unique identifier assigned by Windows to each monitor. It encodes the physical connection path from the GPU to the display, not just the display model.
+
+<Warning>
+Two important implications of this:
+
+1. **Same monitor, different connector = different ID.** If you unplug a monitor from one DisplayPort and reconnect it to another — even on the same GPU — Windows assigns a new Device Instance ID. Monitorian will treat it as a new monitor, and previously saved customizations (name, unison, range) will not automatically apply.
+
+2. **Connection type affects the ID.** Connections via USB-C DisplayPort Alt mode may produce a different ID than the same monitor connected via a standard DisplayPort cable, even to the same port.
+</Warning>
+
+This behavior is a property of the Windows device model, not a Monitorian limitation. Because customizations are stored per Device Instance ID, you may need to re-enter your name and range preferences after changing how a monitor is connected.
+
+## Sorting by Physical Arrangement
+
+By default, Monitorian sorts monitors in the main window according to their physical arrangement on the desktop (`SortsArrangement` is enabled by default). This means the leftmost monitor in your Windows display layout appears first in the list, matching your intuitive expectation.
+
+To disable arrangement-based sorting, toggle **SortsArrangement** off in settings. Monitors will then appear in the order they were detected.
+
+## Large Elements
+
+The `UsesLargeElements` setting controls the overall size of UI elements in the main window, including sliders and monitor cards. It is **enabled by default**, producing a comfortable touch-friendly layout.
+
+Disable **UsesLargeElements** in settings for a more compact view, which is useful if you have several monitors and want to see them all without scrolling.
+
+## Accent Color for the Brightness Slider
+
+The `UsesAccentColor` setting tints the brightness slider using your Windows accent color. It is **disabled by default**.
+
+<Steps>
+  <Step title="Open settings">
+    Right-click the tray icon and navigate to the settings section.
+  </Step>
+  <Step title="Enable accent color">
+    Toggle **UsesAccentColor** to on. Monitorian attaches the accent color palette to the window painter immediately — no restart required.
+  </Step>
+  <Step title="Change your Windows accent color">
+    If you update your Windows accent color in System Settings, Monitorian picks up the change automatically. Disabling **UsesAccentColor** in Monitorian reverts the slider to the default color.
+  </Step>
+</Steps>

@@ -1,0 +1,55 @@
+---
+title: "Adjusting Multiple Monitors Together with Unison"
+description: "Use Monitorian's unison mode to move brightness sliders for multiple monitors simultaneously, with per-monitor opt-in and behavior notes for v4.2 and later."
+---
+
+Monitorian's unison mode lets you adjust the brightness of several monitors at the same time by moving a single slider. Each monitor independently opts into unison — you choose which monitors should move together. This page explains how to enable the feature, how to opt individual monitors in and out, and the limitations to be aware of when unison is active.
+
+## What Unison Mode Does
+
+When at least one monitor has unison enabled, moving its brightness slider also moves the sliders of all other monitors that also have unison enabled. The monitors move by the same absolute step, keeping them in sync. Monitors that are not opted into unison are unaffected.
+
+<Info>
+Unison state is per-monitor and stored as part of each monitor's customization entry. A monitor's unison participation persists across Monitorian restarts, keyed by its Device Instance ID.
+</Info>
+
+## Enabling Unison Mode
+
+The unison feature must first be turned on globally via the `EnablesUnison` setting before individual monitors can be opted in.
+
+<Steps>
+  <Step title="Enable the unison feature">
+    Right-click the Monitorian tray icon to open the menu window and go to settings. Toggle **EnablesUnison** to on. Per-monitor unison toggles will now appear in the main window.
+  </Step>
+  <Step title="Opt a monitor into unison">
+    In the main window, locate the monitor you want to include in unison. Toggle its unison control to enable it. Repeat for each monitor you want to move together.
+  </Step>
+  <Step title="Adjust brightness in unison">
+    Move the brightness slider of any unison-enabled monitor. All other monitors with unison enabled will change by the same amount simultaneously.
+  </Step>
+  <Step title="Opt a monitor out of unison">
+    Toggle the unison control for any monitor to remove it from the group. That monitor's slider will then move independently again.
+  </Step>
+</Steps>
+
+## Disabling Unison Mode Globally
+
+Turning off `EnablesUnison` in settings immediately clears the `IsUnison` flag on all monitors in the current session. Each monitor returns to independent operation. The unison preference is not erased from the customization store, so re-enabling `EnablesUnison` restores each monitor's previously saved unison state.
+
+<Warning>
+When `EnablesUnison` is disabled from settings, **all monitors are immediately removed from unison** for the current session, even if their stored customization has unison set to true. The stored value is only applied when `EnablesUnison` is on.
+</Warning>
+
+## Behavior Change in v4.2
+
+In version 4.2, the function to change brightness in unison was reworked. The updated behavior ensures that unison-linked monitors move together correctly when brightness is changed through any supported input method.
+
+## Conditional Commands and Unison
+
+<Warning>
+Conditional commands (an add-on feature) do **not** fire when a monitor's brightness changes as a result of being in unison. Only a direct change to the monitor that triggered the move will evaluate conditional command logic. If you rely on conditional commands for specific monitors, take this into account when deciding which monitors to include in a unison group.
+</Warning>
+
+## Technical Notes
+
+Monitorian requires the main window to be loaded before unison changes can propagate when triggered from outside the UI (for example, via the brightness watcher). If the window is not yet loaded when a unison-linked update arrives, the app loads the window silently in the background (`ShowUnnoticed`) to ensure the unison change can be applied.

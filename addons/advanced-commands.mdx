@@ -1,0 +1,490 @@
+---
+title: "Advanced Commands: Conditional, Time, and Key"
+description: "Define JSON-based commands in Monitorian that trigger on brightness conditions, scheduled times, or hot key presses to automate monitor control."
+---
+
+Monitorian supports three types of advanced JSON-based commands that go beyond simple command-line calls. Conditional commands execute when a monitor's brightness reaches a specified value, time commands run on a daily schedule, and key commands fire when a hot key is pressed. All three types are defined in JSON files and loaded into Monitorian using the `/load` option.
+
+<Note>
+  Advanced commands are part of the command-line add-on features available for the Microsoft Store version of Monitorian on a subscription basis.
+</Note>
+
+## Command types
+
+<Tabs>
+  <Tab title="Conditional Commands">
+    A set of conditional commands is a sequence of commands to be executed when a specified condition is met. It consists of the following elements:
+
+    - **ConditionalDeviceInstanceId** — Device Instance ID of the monitor whose brightness is used as the condition
+    - **ConditionalValue** — Brightness value (0–100) that triggers execution
+    - **Commands** — Array of commands to run when the condition is met
+
+    Each command can set brightness (`SetBrightness`) or contrast (`SetContrast`) on a specific monitor or all monitors. A separate set of conditional commands is required for each trigger value on each monitor. To cover every brightness step, you would need 101 sets.
+
+    <Warning>
+      A set of conditional commands will be overwritten by another set with the same condition. To run multiple commands for the same condition, include them all in one set. Additionally, if the conditional monitor is in unison mode, the commands will not be executed.
+    </Warning>
+
+    <Info>
+      While conditional, time, or key commands are executing, no other conditional, time, or key commands will run. Brightness changes made by conditional commands will not trigger further conditional commands.
+    </Info>
+
+    #### JSON sample
+
+    ```json
+    [
+      {
+        "ConditionalDeviceInstanceId": "[Device Instance ID of monitor 1]",
+        "ConditionalValue": 50,
+        "Commands": [
+          {
+            "Option": "SetBrightness",
+            "DeviceInstanceId": "[Device Instance ID of monitor 2]",
+            "IsAll": false,
+            "Value": 100
+          },
+          {
+            "Option": "SetContrast",
+            "DeviceInstanceId": "[Device Instance ID of monitor 2]",
+            "IsAll": false,
+            "Value": 50
+          }
+        ]
+      },
+      {
+        "ConditionalDeviceInstanceId": "[Device Instance ID of monitor 1]",
+        "ConditionalValue": 0,
+        "Commands": [
+          {
+            "Option": "SetBrightness",
+            "DeviceInstanceId": null,
+            "IsAll": true,
+            "Value": 0
+          }
+        ]
+      }
+    ]
+    ```
+
+    <Accordion title="JSON schema">
+    ```json
+    {
+      "definitions": {
+        "Command": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "Option": {
+              "type": "string",
+              "enum": [
+                "SetBrightness",
+                "SetContrast"
+              ]
+            },
+           "DeviceInstanceId": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "IsAll": {
+              "type": "boolean"
+            },
+            "Value": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100
+            }
+          },
+          "required": [
+            "Option",
+            "Value"
+          ]
+        },
+        "ConditionalCommand": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "ConditionalDeviceInstanceId": {
+              "type": "string"
+            },
+            "ConditionalValue": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "Commands": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Command"
+              }
+            }
+          },
+          "required": [
+            "ConditionalDeviceInstanceId",
+            "ConditionalValue",
+            "Commands"
+          ]
+        }
+      },
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/ConditionalCommand"
+      }
+    }
+    ```
+    </Accordion>
+  </Tab>
+
+  <Tab title="Time Commands">
+    A set of time commands is a sequence of commands to be executed when a specified daily due time comes. It consists of the following elements:
+
+    - **DueTimeHours** — Hours component of the daily trigger time (0–23)
+    - **DueTimeMinutes** — Minutes component of the daily trigger time (0–59)
+    - **DurationMinutes** — How long after the due time (1–1439 minutes) the commands will still execute if missed
+    - **Commands** — Array of commands to run at the due time
+
+    Each command can set brightness or contrast on a specific monitor or all monitors.
+
+    The duration handles the case where the system starts or resumes after a due time has already passed. For example, if the due time is **08:50** with a duration of **30** minutes, and the system turns on at **09:00**, the commands that were scheduled for 08:50 will still execute. If the system turns on at **09:30**, they will not. The maximum duration is approximately one day (1439 minutes).
+
+    <Warning>
+      A set of time commands will be overwritten by another set with the same due time. To run multiple commands at the same time, include them all in one set. Brightness changes made by time commands will not trigger conditional commands.
+    </Warning>
+
+    #### JSON sample
+
+    ```json
+    [
+      {
+        "DueTimeHours": 9,
+        "DueTimeMinutes": 0,
+        "DurationMinutes": 60,
+        "Commands": [
+          {
+            "Option": "SetBrightness",
+            "DeviceInstanceId": "[Device Instance ID of monitor 1]",
+            "IsAll": false,
+            "Value": 40
+          },
+          {
+            "Option": "SetBrightness",
+            "DeviceInstanceId": "[Device Instance ID of monitor 2]",
+            "IsAll": false,
+            "Value": 45
+          }
+        ]
+      },
+      {
+        "DueTimeHours": 10,
+        "DueTimeMinutes": 0,
+        "DurationMinutes": 60,
+        "Commands": [
+          {
+            "Option": "SetBrightness",
+            "DeviceInstanceId": null,
+            "IsAll": true,
+            "Value": 50
+          }
+        ]
+      }
+    ]
+    ```
+
+    <Accordion title="JSON schema">
+    ```json
+    {
+      "definitions": {
+        "Command": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "Option": {
+              "type": "string",
+              "enum": [
+                "SetBrightness",
+                "SetContrast"
+              ]
+            },
+            "DeviceInstanceId": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "IsAll": {
+              "type": "boolean"
+            },
+            "Value": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100
+            }
+          },
+          "required": [
+            "Option",
+            "Value"
+          ]
+        },
+        "TimeCommand": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "DueTimeHours": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 23
+            },
+            "DueTimeMinutes": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 59
+            },
+            "DurationMinutes": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1439
+            },
+            "Commands": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Command"
+              }
+            }
+          },
+          "required": [
+            "DueTimeHours",
+            "DueTimeMinutes",
+            "DurationMinutes",
+            "Commands"
+          ]
+        }
+      },
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/TimeCommand"
+      }
+    }
+    ```
+    </Accordion>
+  </Tab>
+
+  <Tab title="Key Commands">
+    A set of key commands is a sequence of commands to be executed when a specified hot key is pressed. It consists of the following elements:
+
+    - **KeyGesture** — Key combination in `Modifier+Key` format, e.g. `"Ctrl+Alt+O"`
+    - **Description** — Optional label for the hot key (shown in Command Settings)
+    - **Commands** — Array of commands to run when the hot key is pressed
+
+    Commands can set brightness, set contrast, set input source, or increment/decrement brightness on a specific monitor or all monitors.
+
+    <Info>
+      For the full list of valid modifier keys (Alt, Ctrl, Shift, Windows) and key names, refer to the [ModifierKeys Enum](https://learn.microsoft.com/en-us/dotnet/api/system.windows.input.modifierkeys) and [Key Enum](https://learn.microsoft.com/en-us/dotnet/api/system.windows.input.key) in the .NET documentation.
+    </Info>
+
+    <Warning>
+      If the specified hot key is already in use by Windows or another application, it cannot be registered. Some key combinations are not supported as hot keys. Hot keys must also be enabled in Key Settings.
+    </Warning>
+
+    #### Getting input source values
+
+    To use `SetInput` in a key command, you first need to discover the valid input source values for your monitor:
+
+    ```bat
+    monitorian /get input "[Device Instance ID of monitor]"
+    ```
+
+    The valid values will be shown in parentheses. The following are typical standard values (newer input types such as USB-C are not included):
+
+    | Value | Input type |
+    |-------|------------|
+    | 15 | DisplayPort 1 |
+    | 16 | DisplayPort 2 |
+    | 17 | HDMI 1 |
+    | 18 | HDMI 2 |
+
+    <Tip>
+      A key command that only contains `IncrementBrightness` or `DecrementBrightness` commands is repeatable — the action continues while the hot key is held down. Mixed command sets are not repeatable.
+    </Tip>
+
+    #### JSON sample
+
+    ```json
+    [
+      {
+        "KeyGesture": "Ctrl+Alt+O",
+        "Description": "Monitor 1 to 60",
+        "Commands": [
+          {
+            "Option": "SetBrightness",
+            "DeviceInstanceId": "[Device Instance ID of monitor 1]",
+            "IsAll": false,
+            "Value": 60
+          }
+        ]
+      },
+      {
+        "KeyGesture": "Ctrl+Alt+P",
+        "Description": "All to 40",
+        "Commands": [
+          {
+            "Option": "SetBrightness",
+            "DeviceInstanceId": null,
+            "IsAll": true,
+            "Value": 40
+          }
+        ]
+      },
+      {
+        "KeyGesture": "Ctrl+Alt+Y",
+        "Description": "Monitor 1 to HDMI 1",
+        "Commands": [
+          {
+            "Option": "SetInput",
+            "DeviceInstanceId": "[Device Instance ID of monitor 1]",
+            "IsAll": false,
+            "Value": 17
+          }
+        ]
+      },
+      {
+        "KeyGesture": "Ctrl+Alt+I",
+        "Description": "All increment",
+        "Commands": [
+          {
+            "Option": "IncrementBrightness",
+            "DeviceInstanceId": null,
+            "IsAll": true,
+            "Value": 25
+          }
+        ]
+      },
+      {
+        "KeyGesture": "Ctrl+Alt+D",
+        "Description": "All decrement",
+        "Commands": [
+          {
+            "Option": "DecrementBrightness",
+            "DeviceInstanceId": null,
+            "IsAll": true,
+            "Value": 25
+          }
+        ]
+      }
+    ]
+    ```
+
+    <Accordion title="JSON schema">
+    ```json
+    {
+      "definitions": {
+        "Command": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "Option": {
+              "type": "string",
+              "enum": [
+                "SetBrightness",
+                "SetContrast",
+                "SetInput",
+                "IncrementBrightness",
+                "DecrementBrightness"
+              ]
+            },
+            "DeviceInstanceId": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "IsAll": {
+              "type": "boolean"
+            },
+            "Value": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100
+            }
+          },
+          "required": [
+            "Option",
+            "Value"
+          ]
+        },
+        "KeyCommand": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "KeyGesture": {
+              "type": "string"
+            },
+            "Description": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "Commands": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Command"
+              }
+            }
+          },
+          "required": [
+            "KeyGesture",
+            "Commands"
+          ]
+        }
+      },
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/KeyCommand"
+      }
+    }
+    ```
+    </Accordion>
+  </Tab>
+</Tabs>
+
+## Mixing command types
+
+All three command types — conditional, time, and key — can be stored together in a single JSON array. Monitorian identifies each entry's type from its fields automatically.
+
+## Loading and unloading commands
+
+Prepare your JSON file and load it using the `/load` option:
+
+```bat
+monitorian /load "[file path of JSON file]"
+```
+
+<Steps>
+  <Step title="Create the JSON file">
+    Write your conditional, time, or key command sets in a JSON array and save the file to a known location.
+  </Step>
+  <Step title="Load the file">
+    Run Monitorian with the `/load` option, passing the full file path enclosed in quotes.
+    ```bat
+    monitorian /load "C:\Users\YourName\commands.json"
+    ```
+  </Step>
+  <Step title="Verify in Command Settings">
+    After loading, open the menu window in Monitorian. A **Command Settings** section will appear where you can browse the loaded commands.
+  </Step>
+</Steps>
+
+<Info>
+  Loading a new JSON file replaces all previously loaded commands of the same type. Commands of other types are not affected.
+</Info>
+
+To remove all loaded commands:
+
+```bat
+monitorian /unload
+```
+
+<Warning>
+  `/unload` removes all loaded commands of every type at once. There is no option to unload only one type.
+</Warning>

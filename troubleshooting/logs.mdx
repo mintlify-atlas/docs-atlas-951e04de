@@ -1,0 +1,105 @@
+---
+title: "Collecting Diagnostic Logs from Monitorian"
+description: "How to use Monitorian's hidden menu to generate probe.log and operation.log, and what each log file contains for diagnosing monitor detection issues."
+---
+
+Monitorian includes several diagnostic tools accessible through a hidden menu that are essential for troubleshooting monitor detection and controllability problems. This page explains how to open that menu, what each log file contains, and the correct workflow for capturing the information needed when [reporting an issue](/troubleshooting/reporting-issues).
+
+## Opening the hidden menu
+
+The hidden menu is not visible in the normal UI. To open it, **click the app title at the top of the menu window three times**. The menu will expand to reveal additional diagnostic options.
+
+The hidden menu contains the following items:
+
+- **Probe into monitors** — generates `probe.log`
+- **Rescan monitors** — manually triggers a monitor rescan
+- **Record operations to log** — enables `operation.log` recording
+- **Copy accumulated log** — copies the recorded `operation.log` to the clipboard
+- **Command-line arguments** — stores persistent test arguments
+
+---
+
+## probe.log
+
+`probe.log` captures a snapshot of how Monitorian sees your monitors at a point in time. It is the first piece of evidence needed for any controllability report.
+
+**What it contains:** Raw information about every monitor discovered through the various APIs Monitorian uses to find accessible displays, including the full DDC/CI capabilities string returned by each monitor.
+
+**What it is used for:** Checking whether a monitor is reporting its DDC/CI capabilities correctly, and identifying which monitors Monitorian is able to see versus which ones it is excluding as uncontrollable.
+
+**How to get it:**
+
+<Steps>
+  <Step title="Open the hidden menu">
+    Click the app title at the top of the menu window three times to reveal the hidden menu.
+  </Step>
+  <Step title="Tap Probe into monitors">
+    Select **Probe into monitors** from the hidden menu. Monitorian will query all connected monitors and write the results to `probe.log`.
+  </Step>
+  <Step title="Locate the file">
+    The log file is saved to the app data folder: `C:\Users\[username]\AppData\Local\Monitorian\`
+  </Step>
+</Steps>
+
+---
+
+## operation.log
+
+`operation.log` records what Monitorian does as it scans monitors and updates their states over time. Unlike `probe.log`, which is a single snapshot, `operation.log` captures a sequence of events — making it particularly useful for intermittent issues that only appear some of the time (for example, a monitor that disappears after the PC resumes from sleep).
+
+**What it contains:** A timestamped record of monitor scan operations and state changes, including the state before and after each transition.
+
+**How to enable and capture it:**
+
+<Steps>
+  <Step title="Open the hidden menu">
+    Click the app title at the top of the menu window three times to reveal the hidden menu.
+  </Step>
+  <Step title="Enable recording">
+    Check **Record operations to log** in the hidden menu. Monitorian will begin recording scan and state-change events from this point forward.
+  </Step>
+  <Step title="Wait for the issue to occur">
+    Leave Monitorian running and wait until the problem you are trying to capture happens again. The log accumulates entries in memory as events occur.
+  </Step>
+  <Step title="Copy the log immediately">
+    As soon as you notice the issue, return to the hidden menu and select **Copy accumulated log**. This copies the recorded log content to your clipboard. Paste it into a text file and save it.
+
+    <Note>
+      Copy the log as soon as possible after the issue occurs. The log holds changes up to that point, so capturing it promptly ensures the relevant before-and-after state information is included.
+    </Note>
+  </Step>
+</Steps>
+
+---
+
+## exception.log
+
+`exception.log` is written automatically by Monitorian whenever something unexpected happens internally — it is not generated on demand.
+
+**What it contains:** Details of unhandled exceptions and unexpected internal errors.
+
+**Where to find it:** The app data folder: `C:\Users\[username]\AppData\Local\Monitorian\`
+
+**When it is useful:** If Monitorian crashes or behaves in an unexplained way, `exception.log` is the first place to look for a clue about the cause.
+
+---
+
+## Rescan monitors
+
+The **Rescan monitors** option in the hidden menu manually triggers the same monitor discovery process that Monitorian runs automatically at startup and after display configuration changes. This is useful for testing whether a monitor becomes controllable after you make a hardware or settings change without needing to restart the app.
+
+<Note>
+  A system sound plays when the rescan is complete, so you know when the process has finished.
+</Note>
+
+---
+
+## Command-line arguments (persistent)
+
+The **Command-line arguments** field in the hidden menu lets you store persistent arguments that Monitorian will apply every time it starts, in addition to any arguments passed at launch.
+
+**When it is useful:** For keeping a consistent test environment without modifying shortcuts or scripts. For example, entering `/lang en` in this field forces Monitorian to always use the English language regardless of the system locale setting.
+
+<Tip>
+  Persistent arguments stored here are combined with any arguments passed on the command line when the app launches, so you can layer both without conflict.
+</Tip>

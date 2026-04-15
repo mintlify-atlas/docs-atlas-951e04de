@@ -1,0 +1,154 @@
+---
+title: "Command-Line Options for Brightness and Contrast"
+description: "Use Monitorian from the command line, bat files, desktop shortcuts, or Task Scheduler to get and set monitor brightness or contrast programmatically."
+---
+
+Monitorian exposes command-line options that let you get or set the brightness and contrast of individual monitors or all monitors at once. This makes it straightforward to automate display adjustments from scripts, desktop shortcuts, or Task Scheduler.
+
+<Note>
+  Command-line options are an add-on feature available for the Microsoft Store version of Monitorian on a subscription basis.
+</Note>
+
+## Basic commands
+
+You can call Monitorian by its name `Monitorian` in a command prompt, bat file, or desktop shortcut.
+
+| Action | Option |
+|--------|--------|
+| Get brightness of a monitor | `/get` |
+| Get brightness of a specified monitor | `/get [Device Instance ID]` |
+| Get brightness of all monitors | `/get all` |
+| Set brightness of a monitor | `/set [Brightness]` |
+| Set brightness of a specified monitor | `/set [Device Instance ID] [Brightness]` |
+| Set brightness of all monitors | `/set all [Brightness]` |
+
+The device instance ID is a unique identifier assigned by the OS to each monitor. It must be enclosed in quotes.
+
+## Switching to contrast
+
+Insert `contrast` after `/get` or `/set` to operate on contrast instead of brightness.
+
+<CodeGroup>
+
+```bat Get contrast for all monitors
+monitorian /get contrast all
+```
+
+```bat Set contrast for a specified monitor
+monitorian /set contrast "[Device Instance ID]" 40
+```
+
+</CodeGroup>
+
+## Output format
+
+When called with `/get`, Monitorian outputs one line per monitor:
+
+```
+[Device Instance ID] [Monitor name] [Brightness] B
+```
+
+When called with `/get contrast`, the output is:
+
+```
+[Device Instance ID] [Monitor name] [Contrast] C
+```
+
+<Info>
+  **Output indicators:**
+  - `B` — brightness value
+  - `C` — contrast value
+  - `*` — added when the monitor is the currently selected monitor
+  - `-` — shown in place of `C` when contrast is not supported by the monitor
+</Info>
+
+## Specifying brightness and contrast values
+
+Brightness and contrast range from **0 to 100%**. When using `/set`, you can specify the value in three ways:
+
+| Format | Example | Meaning |
+|--------|---------|---------|
+| Absolute number | `20` | Set to exactly 20% |
+| Increase | `+10` | Increase by 10% |
+| Decrease | `-10` | Decrease by 10% |
+
+## Running multiple options consecutively
+
+You can chain up to 10 options in a single call by listing them one after another.
+
+```bat
+monitorian /set 20 /set contrast 40
+```
+
+## Usage examples
+
+<CodeGroup>
+
+```bat Set brightness of all monitors to 50
+monitorian /set all 50
+```
+
+```bat Increase brightness of all monitors by 30%
+monitorian /set all +30
+```
+
+```bat Get brightness of a specific monitor
+monitorian /get "[Device Instance ID]"
+```
+
+```bat Set brightness and contrast in one call
+monitorian /set 20 /set contrast 40
+```
+
+</CodeGroup>
+
+## Desktop shortcut
+
+You can create a desktop shortcut to set brightness to a specific value. In the shortcut target field, enter a command such as:
+
+```
+Monitorian /set 50
+```
+
+This gives you a one-click way to apply a preset brightness level.
+
+## Task Scheduler
+
+From Task Scheduler, use the full path to the app alias instead of just the app name:
+
+```
+%LOCALAPPDATA%\Microsoft\WindowsApps\Monitorian.exe
+```
+
+For example, to increase brightness of all monitors by 30%, set the Action program to the path above and the argument to `/set all +30`.
+
+## Loading and unloading command files
+
+For more advanced automation, Monitorian supports loading JSON command files that define conditional, time-based, or hot key-triggered commands.
+
+| Option | Usage |
+|--------|-------|
+| Load a command file | `/load [file path]` |
+| Unload all loaded commands | `/unload` |
+
+```bat
+monitorian /load "C:\Users\YourName\commands.json"
+```
+
+```bat
+monitorian /unload
+```
+
+See [Advanced Commands](/addons/advanced-commands) for the full JSON format reference for conditional, time, and key commands.
+
+## Additional options
+
+| Option | Usage | Description |
+|--------|-------|-------------|
+| Preclude a monitor | `/preclude [Device Instance ID]` | Exclude a monitor from get/set operations |
+| Force include a monitor | `/preclear [Device Instance ID]` | Remove a previously set preclusion |
+| Get input source | `/get input [Device Instance ID]` | List the available input source values for a monitor |
+
+<Tip>
+  Use `/get input "[Device Instance ID]"` to discover what input source values your monitor supports before using them in key commands or other automations.
+</Tip>

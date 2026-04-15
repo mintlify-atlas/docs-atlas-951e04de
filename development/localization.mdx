@@ -1,0 +1,92 @@
+---
+title: "Adding a Localization Language to Monitorian"
+description: "How Monitorian's resource file system works and how to contribute a new language translation by creating a .resx file in the correct format."
+---
+
+Monitorian supports multiple display languages through .NET resource files. Each language is defined in a separate `.resx` file stored alongside the default strings, and the correct file is selected automatically based on the user's Windows environment. Contributing a new language requires creating one file and translating its string values — no code changes are needed.
+
+## How localization works
+
+All string resources live in the `/Source/Monitorian.Core/Properties/` folder. The default strings are in `Resources.resx`. Each additional language is a separate file that overrides specific entries from that default file.
+
+- File names follow the format `Resources.[language-culture].resx`
+- Only the **values** (right-hand side of each name/value pair) should be translated
+- The **names** (left-hand side) must remain exactly as they appear in `Resources.resx`
+- You only need to include entries you want to override — entries not present in your file fall back to the default
+
+## Adding a new language
+
+<Steps>
+  <Step title="Copy the default resource file">
+    Copy `Source/Monitorian.Core/Properties/Resources.resx` and place the copy in the same folder.
+  </Step>
+
+  <Step title="Rename the file">
+    Rename the copy using the format `Resources.[language-culture].resx`.
+
+    Examples:
+    - `Resources.de.resx` — German
+    - `Resources.ja-JP.resx` — Japanese (Japan)
+    - `Resources.zh-Hans.resx` — Simplified Chinese
+    - `Resources.pt-BR.resx` — Portuguese (Brazil)
+
+    Use the appropriate BCP 47 language tag for the target language. If a region-specific variant is needed (for example, Brazilian Portuguese vs. European Portuguese), include the region subtag.
+  </Step>
+
+  <Step title="Translate the values">
+    Open the new file and translate the string values. In each `<data>` element, only edit the content inside `<value>`. Leave the `name` attribute unchanged.
+
+    ```xml
+    <!-- Original in Resources.resx -->
+    <data name="ClosingMenuItem" xml:space="preserve">
+      <value>Exit</value>
+    </data>
+
+    <!-- Translated entry in Resources.de.resx -->
+    <data name="ClosingMenuItem" xml:space="preserve">
+      <value>Beenden</value>
+    </data>
+    ```
+  </Step>
+
+  <Step title="Submit a pull request">
+    Open a pull request adding only your new `.resx` file. Do not edit the readme or any other files as part of this PR. See the [Contributing](/development/contributing) guide for language PR guidelines.
+  </Step>
+</Steps>
+
+<Tip>
+  Use phrases that the Windows OS itself uses in the target language wherever possible. Short UI strings like menu items cannot carry full explanations — match the concise, familiar phrasing a user would already recognize from the OS.
+</Tip>
+
+## Currently supported languages
+
+Monitorian currently ships with 22 additional languages beyond the English default:
+
+| Language | Culture code |
+|---|---|
+| Arabic | `ar` |
+| Catalan | `ca` |
+| German | `de` |
+| Greek | `el-GR` |
+| Spanish | `es` |
+| Persian | `fa-IR` |
+| French | `fr` |
+| Italian | `it` |
+| Japanese | `ja-JP` |
+| Korean | `ko-KR` |
+| Dutch | `nl-NL` |
+| Polish | `pl-PL` |
+| Portuguese (Brazil) | `pt-BR` |
+| Romanian | `ro` |
+| Russian | `ru-RU` |
+| Albanian | `sq` |
+| Swedish | `sv-SE` |
+| Turkish | `tr-TR` |
+| Ukrainian | `uk-UA` |
+| Vietnamese | `vi-VN` |
+| Simplified Chinese | `zh-Hans` |
+| Traditional Chinese | `zh-Hant` |
+
+<Note>
+  The file naming convention observed in the repository is consistent with these codes. For example, `Resources.zh-Hans.resx` and `Resources.zh-Hant.resx` are both present as distinct files for the two Chinese variants.
+</Note>

@@ -1,0 +1,73 @@
+---
+title: "Contributing to Monitorian Development"
+description: "Guidelines for reporting issues, requesting features, and submitting pull requests to the Monitorian open-source project on GitHub."
+---
+
+Monitorian welcomes contributions from the community. Before opening an issue, requesting a feature, or submitting a pull request, read through this guide carefully — it will save time for everyone involved.
+
+<AccordionGroup>
+  <Accordion title="General rules">
+    These rules apply to all forms of contribution.
+
+    - **Read the readme first.** Avoid asking questions that are already answered in the project readme. Issues or comments that duplicate readme content may be closed without response.
+    - **Be prepared to follow up.** After opening an issue or request, you will likely be asked for additional information. If you are not available to respond, it may be difficult to make progress on the issue.
+    - **Do not comment by email.** Email replies to GitHub notification emails generate noise and are hard to track. Always respond directly in the GitHub thread.
+  </Accordion>
+
+  <Accordion title="Reporting issues">
+    Before filing a new issue, follow these steps to ensure it is actionable.
+
+    1. **Check the detection and reporting sections first.** Read the [Detection of external monitors](https://github.com/emoacht/Monitorian#detection-of-external-monitors) and [Reporting](https://github.com/emoacht/Monitorian#reporting) sections in the readme. Many monitor-not-detected situations are caused by hardware limitations that the app cannot resolve.
+
+    2. **Search existing issues.** Go to the [Issues page](https://github.com/emoacht/Monitorian/issues) and search for your problem. To search both open and closed issues at once, remove `is:open` from the default syntax in the Filters box and use only `is:issue`.
+
+    3. **Include complete information.** Write your issue so that a reader who has no knowledge of your monitor or other devices can understand and reproduce the problem.
+
+    4. **Attach the required logs.** Include both **probe.log** and **operation.log**. A video clip is not a substitute — it does not show what is happening internally.
+
+    <Note>
+      To obtain **probe.log**, click the app title at the top of the menu window 3 times to open the hidden menu, then tap **Probe into monitors**. To obtain **operation.log**, enable **Record operations to log** in the hidden menu, wait until the issue occurs, then select **Copy accumulated log**.
+    </Note>
+
+    <Warning>
+      An issue that includes no meaningful clue — such as missing logs or insufficient reproduction details — **may be closed without review**.
+    </Warning>
+  </Accordion>
+
+  <Accordion title="Feature requests">
+    Monitorian has a deliberate scope. Read this section before posting a request.
+
+    - **Post in Issues, not Discussions.** Do not open feature requests or suggestions in the **Ideas** section of **Discussions**. All requests should be tracked in [Issues](https://github.com/emoacht/Monitorian/issues).
+    - **Search existing issues first.** Your idea may already have been proposed or discussed.
+    - **Respect the app's focus.** This app's primary purpose is adjusting the brightness of monitors. DDC/CI is the means to that end, not the end itself. Requests that fall outside this scope are unlikely to be accepted.
+    - **Explain the necessity and real-world value.** Describe how the feature would be useful in concrete scenarios. The fact that another app has a similar feature is not a sufficient reason to add it here.
+    - **Include technical implementation details.** The more technically specific your proposal, the easier it is to evaluate. A feature that is not technically feasible cannot be added regardless of demand.
+
+    <Warning>
+      A feature request that duplicates one already discussed in a closed issue **may be closed without review**.
+    </Warning>
+  </Accordion>
+
+  <Accordion title="Pull requests: language translations">
+    Adding or improving a language translation is a straightforward contribution. Follow these guidelines to ensure the PR is accepted.
+
+    - Read the [Globalization section](https://github.com/emoacht/Monitorian#globalization) of the readme before starting.
+    - Use phrases used by the OS in the target language as much as possible. Consistency with system UI language is more important than a perfectly literal translation.
+    - Do not try to explain everything. Short UI strings like menu items cannot carry full explanations — brevity is expected.
+    - Do not edit the readme as part of a language PR.
+
+    See the [Localization](/development/localization) page for the technical steps to add a new language file.
+  </Accordion>
+
+  <Accordion title="Pull requests: functionality changes">
+    Changes to app behavior require coordination before any code is written.
+
+    - **Open an issue and reach agreement first.** Do not start work on a functionality change until you have opened an issue describing your proposed change and received agreement from the maintainer. Work done without prior agreement may not be merged.
+    - **Split commits by reason.** Each commit should have a single, clear purpose. Avoid bundling unrelated changes into one commit.
+    - **Use modern C#.** It is recommended to use the latest C# language features, provided they are supported by this project's target framework.
+
+    <Warning>
+      Pull requests for functionality changes that were not discussed and agreed upon in an issue beforehand may be rejected.
+    </Warning>
+  </Accordion>
+</AccordionGroup>
